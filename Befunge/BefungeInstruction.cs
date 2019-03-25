@@ -413,7 +413,7 @@ public static class ExecutionStateFactory
             string line;
             while ((line = stringReader.ReadLine()) != null)
             {
-                lineSize = line.Length;
+                lineSize = Math.Max(line.Length, lineSize);
                 codeLines.Add(line);
             }
 
@@ -423,12 +423,7 @@ public static class ExecutionStateFactory
                 line = codeLines[y];
                 for (int x = 0; x < lineSize; x++)
                 {
-                    if (x >= line.Length)
-                    {
-                        throw new InvalidOperationException($"Invalid program: program is not rectangular and is not of size {lineSize} at line {y+1}. Line of instructions: {line}");
-                    }
-
-                    program[x, y] = line[x];
+                    program[x, y] = x >= line.Length ? ' ' /*nop*/ : line[x];
                 }
             }
         }
